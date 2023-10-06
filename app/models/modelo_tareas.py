@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP, DateTime
+from datetime import datetime, date
+
+from sqlalchemy import Column, Integer, String, TIMESTAMP, Date
 from app.database import Base
 
 class Tareas(Base):
@@ -8,6 +10,6 @@ class Tareas(Base):
     usuario = Column(String(length=20), index = True, nullable = False)
     titulo = Column(String(length=40), index = True, nullable = False)
     descripcion = Column(String(length=150), index = True, nullable = False)
-    fecha_vencimiento = Column(DateTime, nullable = False)
-    fecha_creacion = Column(TIMESTAMP, nullable = False)
+    fecha_vencimiento = Column(Date, nullable = False)
+    fecha_creacion = Column(TIMESTAMP, default=datetime.utcnow, nullable = False)
     estado = Column(String(length=100), index = True, nullable = False)
