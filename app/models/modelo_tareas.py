@@ -1,10 +1,13 @@
-from sqlalchemy import column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
+from sqlalchemy import Column, Integer, String, TIMESTAMP, DateTime
+from app.database import Base
 
 class Tareas(Base):
     __tablename__ = "tareas"
 
-    id = column(Integer, primary_key = True, index = True)
-    usuario = column()
+    id = Column(Integer, primary_key = True, index = True)
+    usuario = Column(String(length=20), index = True, nullable = False)
+    titulo = Column(String(length=40), index = True, nullable = False)
+    descripcion = Column(String(length=150), index = True, nullable = False)
+    fecha_vencimiento = Column(DateTime, nullable = False)
+    fecha_creacion = Column(TIMESTAMP, nullable = False)
+    estado = Column(String(length=100), index = True, nullable = False)
