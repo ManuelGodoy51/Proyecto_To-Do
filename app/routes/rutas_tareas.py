@@ -1,7 +1,6 @@
 from datetime import datetime
 
-from fastapi import APIRouter, HTTPException, Depends
-import collections
+from fastapi import APIRouter, HTTPException, Depends, Query
 from app.database import SessionLocal
 from app.models.modelo_tareas import Tareas
 
@@ -14,7 +13,7 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/tareas")
+@router.post("/guardar")
 def crear_tarea(tarea_data : dict, db : SessionLocal = Depends(get_db)):
 
     match tarea_data:
@@ -38,3 +37,15 @@ def crear_tarea(tarea_data : dict, db : SessionLocal = Depends(get_db)):
     db.refresh(db_tarea)
     return db_tarea
 
+@router.get("/lista")
+def Listar_tareas(usuario: str, estado: str = Query(None), db : SessionLocal = Depends(get_db)):
+    if usuario == None or usuario == "":
+        raise HTTPException(status_code=400, detail="El usuario es requerido")
+    else:
+        if estado == None or estado == "":
+            print("Entre")
+            tareas = db.query(Tareas).filter(Tareas.usuario == usuario).all()
+        else:
+            tareas = db.query(Tareas).filter(Tareas.usuario == usuario, Tareas.estado == estado).all()
+
+    return tareas
