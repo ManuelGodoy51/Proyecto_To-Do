@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from fastapi import APIRouter, HTTPException, Depends, Query
-from app.database import SessionLocal
+from app.models.database import SessionLocal
 from app.models.modelo_tareas import Tareas
 
 router = APIRouter()
@@ -14,7 +14,7 @@ def get_db():
         db.close()
 
 @router.post("/guardar")
-def crear_tarea(tarea_data : dict, db : SessionLocal = Depends(get_db)):
+def Crear_tarea(tarea_data : dict, db : SessionLocal = Depends(get_db)):
 
     match tarea_data:
         case _ if "usuario" not in tarea_data:
@@ -30,7 +30,6 @@ def crear_tarea(tarea_data : dict, db : SessionLocal = Depends(get_db)):
 
     fecha_vencimiento_str = tarea_data["fecha_vencimiento"]
     tarea_data["fecha_vencimiento"] = datetime.strptime(fecha_vencimiento_str, "%Y-%m-%d").date()
-
     db_tarea = Tareas(**tarea_data)
     db.add(db_tarea)
     db.commit()
@@ -38,14 +37,52 @@ def crear_tarea(tarea_data : dict, db : SessionLocal = Depends(get_db)):
     return db_tarea
 
 @router.get("/lista")
-def Listar_tareas(usuario: str, estado: str = Query(None), db : SessionLocal = Depends(get_db)):
-    if usuario == None or usuario == "":
-        raise HTTPException(status_code=400, detail="El usuario es requerido")
-    else:
-        if estado == None or estado == "":
-            print("Entre")
-            tareas = db.query(Tareas).filter(Tareas.usuario == usuario).all()
-        else:
-            tareas = db.query(Tareas).filter(Tareas.usuario == usuario, Tareas.estado == estado).all()
+def Listar_tareas(usuario: str = Query(None), estado: str = Query(None), db : SessionLocal = Depends(get_db)):
+    if not usuario and not estado:
+        tareas = db.query(Tareas).all()
+        if not tareas:
+            raise HTTPException(status_code=404, detail="No existen tareas creadas en DB.")
+    elif usuario and not estado:
+        tareas = db.query(Tareas).filter(Tareas.usuario == usuario).all()
+        if not tareas:
+            raise HTTPException(status_code=404, detail="El usuario no posee tareas.")
+    elif estado and not usuario:
+        tareas = db.query(Tareas).filter(Tareas.estado == estado).all()
+        if not tareas:
+            raise HTTPException(status_code=404, detail="No existen tareas creadas con este estado.")
+    elif usuario and estado:
+        tareas = db.query(Tareas).filter(Tareas.usuario == usuario, Tareas.estado == estado).all()
+        if not tareas:
+            raise HTTPException(status_code=404, detail="El usuario no posee tareas con ese estado.")
 
     return tareas
+
+@router.put("/editar_tarea")
+def Editar_tareas(tarea_id: int, usuario: str, data: dict, db : SessionLocal = Depends(get_db)):
+    existe_tarea = db.query(Tareas).filter(Tareas.id == tarea_id, Tareas.usuario == usuario).first()
+    if not existe_tarea:
+        raise HTTPException(status_code=404, detail="No existe la tarea")
+
+    if "fecha_vencimiento" in data:
+        fecha_vencimiento_str = data["fecha_vencimiento"]
+        data["fecha_vencimiento"] = datetime.strptime(fecha_vencimiento_str, "%Y-%m-%d").date()
+
+    for key, value in data.items():
+        setattr(existe_tarea, key, value)
+
+    db.commit()
+    db.refresh(existe_tarea)
+
+    return existe_tarea
+
+
+@router.delete("/eliminar")
+def Eliminar_tarea(tarea_id: int, usuario: str, db : SessionLocal = Depends(get_db)):
+    existe_tarea = db.query(Tareas).filter(Tareas.id == tarea_id, Tareas.usuario == usuario).first()
+    if existe_tarea is None:
+        raise HTTPException(status_code=404, detail="No existe la tarea")
+
+    db.delete(existe_tarea)
+    db.commit()
+
+    return {"message": "Tarea eliminada satisfactoriamente"}

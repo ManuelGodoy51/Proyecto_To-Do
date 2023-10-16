@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.models import modelo_tareas
-from app.database import engine
+from app.models.database import engine
 from app.routes import rutas_tareas
 
 modelo_tareas.Base.metadata.create_all(bind=engine)

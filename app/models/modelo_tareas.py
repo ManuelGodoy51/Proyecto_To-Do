@@ -1,7 +1,7 @@
-from datetime import datetime, date
+from datetime import datetime
 
 from sqlalchemy import Column, Integer, String, TIMESTAMP, Date
-from app.database import Base
+from app.models.database import Base
 
 class Tareas(Base):
     __tablename__ = "tareas"
