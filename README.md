@@ -1,6 +1,6 @@
 ![Buenas, Buenas](./img/pngegg.png)
 # Proyecto Final
-Sistema que consta de endpoint para la creación, visualización, edición y eliminación de tareas, además de poder marcar las tareas que estén completadas, todo desarrollado en Python ocupando FastApi.
+Sistema que consta de endpoint para la creación, visualización, edición y eliminación de tareas, todo desarrollado en Python ocupando FastApi.
 
 ### Creado por Manuel Godoy
  ![Creado por Manuel Godoy](./img/shrek_bailando.gif)
@@ -25,3 +25,4 @@ Sistema que consta de endpoint para la creación, visualización, edición y eli
 - SQLAlchemy==2.0.22
 - starlette==0.27.0
 - typing_extensions==4.8.0
+![Test Unitario](./img/shrek-dreamworks.gif)
