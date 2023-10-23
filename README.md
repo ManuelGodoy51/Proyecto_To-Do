@@ -1,4 +1,6 @@
 ![Buenas, Buenas](./img/pngegg.png)
+#### Para ver este proyecto se debe ejecutar con el comando uvicorn main:app --reload y para verlo en el explorador es entrando a http://127.0.0.1:8000/docs#/
+
 # Proyecto Final
 Sistema que consta de endpoint para la creación, visualización, edición y eliminación de tareas, todo desarrollado en Python ocupando FastApi.
 
