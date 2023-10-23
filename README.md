@@ -27,3 +27,6 @@ Sistema que consta de endpoint para la creación, visualización, edición y eli
 - typing_extensions==4.8.0
 
   ![Test Unitario](./img/shrek-dreamworks.gif)
+Los test unitarios se realizaron con los comandos coverage run -m pytest que sirve para correr las pruebas unitarias alojadas en la carpeta
+test con un archivo llamado test_tareas.py, y se realizo el reporte en html con el comando  coverage report html que nos permite visualizar
+de mejor manera las pruebas unitarias con un porcentaje de exito
