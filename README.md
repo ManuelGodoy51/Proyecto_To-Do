@@ -34,4 +34,4 @@ Sistema que consta de endpoint para la creación, visualización, edición y eli
 
 # Esperando que tenga un buen día, le invito a revisar este pequeño proyecto.
 
-![Adios](./img/gato.gif)
+![Adios](./img/gato.gif) ![Baile](./img/shreckck.gif)
