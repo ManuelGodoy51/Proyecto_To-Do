@@ -25,4 +25,5 @@ Sistema que consta de endpoint para la creación, visualización, edición y eli
 - SQLAlchemy==2.0.22
 - starlette==0.27.0
 - typing_extensions==4.8.0
+  
 ![Test Unitario](./img/shrek-dreamworks.gif)
